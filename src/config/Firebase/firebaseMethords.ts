@@ -94,7 +94,6 @@ const isUserLogin = () => {
 
 let Uploadfile = (file: File, path: string) => {
     return new Promise((resolve, reject) => {
-        console.log(file)
         const storageRef = StoreRef(Storage, `images/${path}/${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
         uploadTask.on(

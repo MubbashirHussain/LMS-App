@@ -30,7 +30,6 @@ const StudentForm = () => {
     let InstitutesData = useSelector((state: any) => state.institute.Institutes)
     let CoursesData = Object.values(InstitutesData[UserLogined.id].Course)
     let Courses: any[] = CoursesData.map((x: any) => ({ text: x.CourseName, value: x.CourseName }))
-    console.log(Courses)
     let dispatch: AppDispatch = useDispatch()
     let getInputValues = (e: any) => { setFromData({ ...FormData, [e.target.name]: e.target.value }) }
     let RegisterInstituteBtn = () => {

@@ -76,7 +76,6 @@ const InstituteList = () => {
     NoOfCampus: x.NoOfCampus,
     status: x.IsinstituteActive
   }))
-  console.log(data)
   React.useEffect(() => {
     dispatch(FetchInstitute("institute"))
   }, [])

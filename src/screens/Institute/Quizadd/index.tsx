@@ -72,7 +72,6 @@ const QuizAppAdmin = () => {
   }
 
   let AddQuiz = () => {
-    console.log(QuizInfo?.QuizOpen)
     if (true
       && QuestionList.length > 0
       && QuizInfo?.QuizName 

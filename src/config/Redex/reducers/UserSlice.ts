@@ -48,7 +48,6 @@ export const instituteSlice = createSlice({
                 state.UserLogin = "NoUserLogin"
             })
             .addCase(AddUserRegister.fulfilled, (state, action) => {
-                console.log(action.payload)
                 state.User.push(action.payload)
             })
     }

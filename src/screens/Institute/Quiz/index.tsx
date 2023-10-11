@@ -19,7 +19,7 @@ function QuizList() {
     let dispatch: Dispatch = useDispatch()
 
     let Selected = Quizlist.findIndex((x: any) => Params["*"]?.split("%20").join(" ") === x.QuizInfo.QuizName)
-    console.log(Quizlist[Selected])
+    // console.log(Quizlist[Selected])
     React.useEffect(() => {
     }, [])
 
@@ -27,21 +27,22 @@ function QuizList() {
 
 
         <>
-            <Container maxWidth="md" className="bg-gray-100 min-w-full">
-                <div className="flex items-center flex-col">
-                    <h1 className="text-4xl font-semibold my-8 self-start">Quiz List </h1>
-                    <div className="flex justify-center items-center flex-wrap gap-10">
-                        <Routes>
-                            <Route path="/" element={<>{Quizlist && Quizlist.map((x: any, i: number) => <CS_Card
+
+            <Routes>
+                <Route path="/" element={<><Container maxWidth="md" className="bg-gray-100 min-w-full">
+                    <div className="flex items-center flex-col">
+                        <h1 className="text-4xl font-semibold my-8 self-start">Quiz List </h1>
+                        <div className="flex justify-center items-center flex-wrap gap-10">
+                            {Quizlist && Quizlist.map((x: any, i: number) => <CS_Card
                                 ClassName="shadow-md cursor-pointer" key={i}
                                 onCardClick={() => { Navigate(`${x.QuizInfo.QuizName}`) }}
                                 Data={{ title: x.QuizInfo.QuizName, description: x.QuizInfo.QuizDescription, duration: x.QuizInfo.QuizDuration, }} />
-                            )}</>} />
-                            <Route path="*" element={<>{Selected < 0 ? <NotFound /> : <EditQuiz QuizData={Quizlist[Selected]} DatasetFX={(Data:any) => { dispatch(UpdateQuizList({ InsID: UserLogined.id, QuizID: Quizlist[Selected], Data: Data }))}} />}</>} />
-                        </Routes >
+                            )}
+                        </div>
                     </div>
-                </div>
-            </Container>
+                </Container></>} />
+                <Route path="*" element={<>{Selected < 0 ? <NotFound /> : <EditQuiz QuizData={Quizlist[Selected]} DatasetFX={(Data: any) => { dispatch(UpdateQuizList({ InsID: UserLogined.id, QuizID: Quizlist[Selected], Data: Data })) }} />}</>} />
+            </Routes >
         </>
     )
 }

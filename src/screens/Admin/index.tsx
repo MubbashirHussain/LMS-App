@@ -20,7 +20,7 @@ function Logout() {
     let Navigate = useNavigate()
     React.useEffect(() => {
         FirebaseLogout()
-        Navigate("/quiz")
+        Navigate("/login")
     }, [])
     return (<><h1>13</h1></>)
 }
