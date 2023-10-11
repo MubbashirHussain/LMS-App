@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  height: 100%;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+
+}
+
+button:focus,
+select:focus {
+  box-shadow: none !important;
+}
+
+.Custom-card img {
+  margin: -40px auto;
+  height: 68px;
+  width: 68px;
+}
+.list-none::marker{
+  color: transparent;
+  }
+.li-active::marker{
+  color: rgb(4, 255, 4) !important;
+}
+.li-unactive::marker{
+  color: rgb(255, 4, 4) !important;
+}
+
