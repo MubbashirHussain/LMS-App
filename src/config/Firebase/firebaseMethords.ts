@@ -48,8 +48,8 @@ let FirebaseUpdateData = (path: string, id: number | string, Obj: any) => {
     return new Promise((resolve, reject) => {
         let DbRef = dbref(db, `${path}/${id}`)
         update(DbRef, Obj)
-            .then((res: any) => resolve(res))
-            .catch((er: any) => reject(er))
+            .then((res: any) =>{ console.log(res) ; resolve(res)})
+            .catch((er: any) =>{ console.log(er) ; reject(er)})
     })
 }
 
@@ -92,7 +92,7 @@ const isUserLogin = () => {
 }
 
 
-let Uploadfile = (file: File, path: string) => {
+let FirebaseUploadfile = (file: File, path: string) => {
     return new Promise((resolve, reject) => {
         const storageRef = StoreRef(Storage, `images/${path}/${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -112,7 +112,6 @@ let Uploadfile = (file: File, path: string) => {
             },
             (error) => {
                 reject(error);
-                console.log(error);
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref)
@@ -125,4 +124,4 @@ let Uploadfile = (file: File, path: string) => {
 };
 
 
-export { FirebaseLogin, FirebaseSignup, FirebaseSetData, FirebaseGetData, FirebaseUpdateData, FirebaseLogout, isUserLogin, Uploadfile ,DeleteUser }
+export { FirebaseLogin, FirebaseSignup, FirebaseSetData, FirebaseGetData, FirebaseUpdateData, FirebaseLogout, isUserLogin, FirebaseUploadfile ,DeleteUser }

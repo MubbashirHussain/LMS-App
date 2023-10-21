@@ -54,7 +54,12 @@ type Props = {
     NavListArray: NavListType,
     CompPathName: string,
     Logo: React.ReactElement | string,
+    SmLogo?: React.ReactElement | string,
     NavConfig?: NavConfig,
+    ExtraRoutes?: {
+        route: string,
+        RouteComponent: React.ReactElement
+    }[]
 }
 
 
@@ -75,7 +80,7 @@ type Props = {
 
 export default function ResponsiveDrawer(props: Props) {
 
-    const { window, Logo, NavConfig, CompPathName, NavListArray } = props;
+    const { window, Logo, NavConfig, SmLogo, CompPathName, NavListArray ,ExtraRoutes } = props;
     let LogoParentStyle = NavConfig?.LogoParentStyle ?? {}
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -85,7 +90,7 @@ export default function ResponsiveDrawer(props: Props) {
     const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
     // React.useEffect(() => { console.log(NavListArray.NavList[0].Components[0].route) })
-    React.useEffect(() => { location.pathname === `${CompPathName}` ? Navigate(`${NavListArray.NavList[0].Components[0].route}`) : null }, [])
+    React.useEffect(() => { location.pathname === `${CompPathName}` ? Navigate(`${NavListArray.NavList[0].Components[0].Navigate ?? NavListArray.NavList[0].Components[0].route}`) : null }, [])
     const drawer = (
         <>
 
@@ -102,7 +107,7 @@ export default function ResponsiveDrawer(props: Props) {
                                 <Divider />
                                 {x.Heading && <h1 className="px-3 pt-5 pb-1 text-zinc-500 text-sm font-semibold">{x.Heading}</h1>}
                                 {x.Components && x.Components.map((Obj: any, index: number) => (
-                                    <NavLink to={`${Obj.Navigate ?? Obj.route}`} key={index} onClick={()=>setMobileOpen(false)}>
+                                    <NavLink to={`${Obj.Navigate ?? Obj.route}`} key={index} onClick={() => setMobileOpen(false)}>
                                         <ListItem sx={{
                                             "& .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root:hover": {
                                                 color: NavConfig?.ListFontColor ?? "#757575",
@@ -196,7 +201,7 @@ export default function ResponsiveDrawer(props: Props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">{Logo ?? "LOGO"}</Typography>
+                    <Typography variant="h6" noWrap component="div">{SmLogo ?? Logo}</Typography>
                 </Toolbar>
             </AppBar>
             <Box
@@ -260,6 +265,7 @@ export default function ResponsiveDrawer(props: Props) {
                     <Routes>
                         {NavListArray.NavList.map((j: any, i: number) => (j.Components && j.Components.map((x: any) => (<Route key={i} path={`${x.route}`} element={x.RouteComponent} />))))}
                         {NavListArray.BottomNav?.map((x: any, i: number) => <Route key={i} path={`${x.route}`} element={x.RouteComponent} />)}
+                        {ExtraRoutes?.map((x: any, i: number) => <Route key={i} path={`${x.route}`} element={x.RouteComponent} />)}
                     </Routes>
                 }
                 <Toolbar />

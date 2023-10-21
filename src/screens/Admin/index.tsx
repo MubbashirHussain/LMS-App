@@ -12,9 +12,14 @@ import { blue } from '@mui/material/colors';
 import { useNavigate } from "react-router-dom";
 import { FirebaseLogout } from "../../config/Firebase/firebaseMethords";
 import InstituteList from "./InstituteList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InstituteForm from "./InstituteFrom";
 import UserRegsitration from "./UserRegistration";
+import { FetchInstituteFromAdmin } from "../../config/Redex/reducers/AdminSlice";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import ColorPage from "./Color";
+import Payment from "./payment";
+
 
 function Logout() {
     let Navigate = useNavigate()
@@ -32,14 +37,13 @@ let Defaultdata = {
             Components: [
                 { route: "InstituteList", text: "Institute List", Icon: <PlaylistAddCheckIcon />, RouteComponent: <InstituteList /> },
                 { route: "InstituteForm", text: "Institute Form", Icon: <InsertDriveFileOutlinedIcon />, RouteComponent: <InstituteForm /> },
-                // { route: "InstituteSubmitions", text: "Institute Submitions", Icon: <FormatIndentIncreaseIcon />, RouteComponent: <>Submition</> },
             ]
         },
         {
             Components: [
                 { route: "UserRegister", text: "User Register", Icon: <PersonAddAltIcon />, RouteComponent: <UserRegsitration /> },
-                { route: "ColorThemeSet", text: "Color Theme Set", Icon: <PaletteOutlinedIcon />, RouteComponent: <>Color</> },
-                { route: "ActivationPayment", text: `Activation \n and payment details`, Icon: <AddCardIcon />, RouteComponent: <>Activation payment details</> },
+                { route: "ColorThemeSet", text: "Color Theme Set", Icon: <PaletteOutlinedIcon />, RouteComponent: <ColorPage /> },
+                { route: "ActivationPayment", text: `Activation \n and payment details`, Icon: <AddCardIcon />, RouteComponent: <Payment /> },
             ]
         },
     ],
@@ -48,14 +52,20 @@ let Defaultdata = {
     ]
 }
 
+type state = { a: string }
+type AppDispatch = ThunkDispatch<state, any, AnyAction>
 
 const Admin = () => {
 
     let UserLogined = useSelector((state: any) => state.User.UserLogin)
     let Navigate = useNavigate()
+    let dispatch: AppDispatch = useDispatch()
 
     React.useEffect(() => {
-        UserLogined.Usertype ? (UserLogined.Usertype != "admin" ? Navigate("/login") : null) : UserLogined === "NoUserLogin" ? Navigate("/login") : null
+        UserLogined.Usertype ?
+            (UserLogined.Usertype != "admin" ? Navigate("/login")
+                : dispatch(FetchInstituteFromAdmin(`institute`)))
+            : UserLogined === "NoUserLogin" ? Navigate("/login") : null
     }, [UserLogined])
 
 
@@ -66,7 +76,6 @@ const Admin = () => {
                 <CS_Drawer
                     CompPathName="/admin"
                     NavListArray={Defaultdata}
-                    NavConfig={{}}
                     Logo={
                         <div className="flex justify-center items-center">
                             <Avatar className="text-center" sx={{ bgcolor: blue[500], height: 42, width: 42, fontSize: "1.5rem" }} alt={UserLogined.UserName} src="./" />

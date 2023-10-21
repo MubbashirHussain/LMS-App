@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { FirebaseLogin } from "../../config/Firebase/firebaseMethords";
 import { Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 
@@ -20,7 +20,10 @@ function Login() {
     let UserLogined = useSelector((state: any) => state.User.UserLogin)
 
     // let dispatch: AppDispatch = useDispatch()
-
+    React.useEffect(() => {
+        if (UserLogined && UserLogined.Usertype) { Navigate("/checkLogin") }
+    }, [UserLogined])
+    
     let Navigate = useNavigate()
     const inputEvent = (e: any) => {
         if (e.target.value.length > 0 && e.target.name === "Password") setPasswordError(false)
@@ -28,9 +31,6 @@ function Login() {
         setinpVal({ ...inpVal, [e.target.name]: e.target.value })
 
     }
-    React.useEffect(() => {
-        if (UserLogined && UserLogined.Usertype) { Navigate("/checkLogin") }
-    }, [UserLogined])
     let clickHandler = () => {
         if (inpVal.Password === "" && inpVal.Email === "") { setEmailError(true), setPasswordError(true) }
         if (inpVal.Email === "") { setEmailError(true) }
@@ -75,7 +75,7 @@ function Login() {
                             <div className="flex flex-col gap-5 my-5">
                                 {FormError && <Typography variant="body2" className="text-center capitalize my-5" sx={{ my: 3 }} color="error">{FormError}</Typography>}
                                 <Button variant="contained" onClick={clickHandler}>Login</Button>
-                                <Link to="/signup" className="text-blue-500 self-center">I don't have account Signup</Link>
+                                {/* <Link to="/signup" className="text-blue-500 self-center">I don't have account Signup</Link> */}
                             </div>
                         </div>
                     </Container>

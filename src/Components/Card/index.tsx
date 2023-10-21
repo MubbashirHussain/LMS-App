@@ -3,35 +3,56 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { CardMedia } from '@mui/material';
+import { SxProps, Theme } from '@mui/system';
+
+// let Demo = { title: 123, description: "hello world", BottomComp: <>hellow</>, WithTitleComponent: <>456</> }
+
 
 type Props = {
     Data: {
-        title: string,
-        description?: string,
+        title: string | number,
+        description?: string | number,
         duration?: number,
-        Openstatus?: boolean | string,
-        ActionBtns?: React.ReactElement[]
+        BottomComp?: React.ReactElement
+        WithTitleComponent?: React.ReactElement,
+        Media?: {
+            imageSrc: string,
+            title?: string,
+            sx?: SxProps<Theme>,
+            ClassName?: string
+        }
     },
-    sx?: React.CSSProperties,
+    sx?: SxProps<Theme>,
     ClassName?: string,
-    onCardClick?: Function,
+    onCardClick?: CallableFunction,
+
 }
 
 
+
 export default function MediaCard(props: Props) {
-    const { Data, ClassName, sx ,onCardClick } = props
+    const { Data, ClassName, sx, onCardClick } = props
     return (
-        <Card  onClick={(e)=>{onCardClick && onCardClick(e)}}
-        sx={{ ...sx, maxWidth: 345, minWidth: 300, minHeight: 200 }}
+        <Card onClick={() => onCardClick && onCardClick()}
+            sx={{ ...sx, maxWidth: 345, minWidth: 300, minHeight: 200 }}
             className={"flex flex-col justify-between " + ClassName}>
+            {Data.Media && <CardMedia
+                className={Data.Media.ClassName}
+                sx={{ ...Data.Media.sx, height: 140 }}
+                image={Data.Media.imageSrc}
+                title={Data.Media.title}
+            />}
             <CardContent>
                 <div className='flex justify-between items-center'>
                     <Typography gutterBottom variant="h5" component="div">
                         {Data.title}
                     </Typography>
+                    {Data.WithTitleComponent}
+
                 </div>
                 <div className="overflow-hidden">
-                    <Typography className="text-ellipsis box whitespace-pre-wrap" sx={{
+                    <Typography className="text-ellipsis text-start box whitespace-pre-wrap" sx={{
                         display: '-webkit-box',
                         WebkitBoxOrient: "vertical",
                         WebkitLineClamp: 3,
@@ -40,9 +61,8 @@ export default function MediaCard(props: Props) {
                     </Typography>
                 </div>
             </CardContent>
-            <CardActions className="flex justify-between">
-                {Data.ActionBtns?.map((x: any, i: number) => (<span key={i}>{x}</span>))}
-                <p className="px-3 font-semibold text-sm uppercase">Duration <span className='text-blue-500'>{Data.duration}</span></p>
+            <CardActions className="">
+                {Data.BottomComp}
             </CardActions>
         </Card>
     );

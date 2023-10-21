@@ -16,37 +16,6 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt';
 //   QuizDescription?: string,
 // }
 
-// let demo = {
-//   QuizInfo: {
-//     QuizName: "Name",
-//     QuizDuration: 30,
-//     SecretKey: "125",
-//     QuizOpen: true,
-//     QuizDescription: "Test data",
-//   },
-//   QuizQuestion: [
-//     {
-//       Question: "Question no 1",
-//       Options: ["option1", "option2"],
-//       CorrectAns: "correct",
-//     },
-//     {
-//       Question: "Question no 2",
-//       Options: ["option1", "option2"],
-//       CorrectAns: "correct",
-//     },
-//     {
-//       Question: "Question no 3",
-//       Options: ["option1", "option2"],
-//       CorrectAns: "correct",
-//     },
-//     {
-//       Question: "Question no 4",
-//       Options: ["option1", "option2"],
-//       CorrectAns: "correct",
-//     },
-//   ]
-// }
 type Props = {
   DatasetFX: CallableFunction,
   QuizData: any
@@ -98,7 +67,7 @@ const EditQuiz = (props: Props) => {
 
   React.useEffect(() => {
     ReRendererFunction()
-  },[QuizData])
+  }, [QuizData])
 
   let GettingInputValues = (e: any) => setQuizInfo({ ...QuizInfo, [e.target.name]: e.target.value })
   let AddQuestion = () => {
@@ -143,7 +112,7 @@ const EditQuiz = (props: Props) => {
 
   }
 
-  let AddQuiz = () => {
+  let EditQuiz = () => {
     if (true
       && QuestionList.length > 0
       && QuizInfo?.QuizName
@@ -153,10 +122,9 @@ const EditQuiz = (props: Props) => {
       && QuizInfo?.QuizOpen != undefined
       && QuizInfo?.QuizDescription
     ) {
-      FormData.QuizQuestion = [...QuestionList];
-      FormData.QuizInfo = { ...QuizInfo };
+      setFormData({ ...FormData, QuizQuestion: QuestionList, QuizInfo: QuizInfo })
       setFormData({ ...FormData })
-      DatasetFX(FormData)
+      DatasetFX({QuizQuestion :QuestionList ,QuizInfo: QuizInfo})
     } else {
       alert("something is Missing")
     }
@@ -166,7 +134,7 @@ const EditQuiz = (props: Props) => {
   return (<>
     <div className="flex justify-between my-5">
       <h2 className="text-3xl">Edit Quiz</h2>
-      <Button variant="contained" onClick={AddQuiz}>save Quiz</Button>
+      <Button variant="contained" onClick={EditQuiz}>save Quiz</Button>
     </div>
     <Box
       className="grid grid-cols-3 gap-3"
@@ -177,7 +145,7 @@ const EditQuiz = (props: Props) => {
       <CS_Input Value={QuizInfo?.QuizName} onChangeEvt={(e: any) => GettingInputValues(e)} Name="QuizName" disabled={FormConfig.FromLock} Error={FormConfig.QuizNameEr} label="Quiz Name" Required={true} Variant='filled' />
       <CS_Input Value={QuizInfo?.QuizDuration} onChangeEvt={(e: any) => GettingInputValues(e)} Name="QuizDuration" disabled={FormConfig.FromLock} Error={FormConfig.QuizDurationEr} label="Quiz Duration in min" type='number' Required={true} Variant='filled' />
       <CS_Input Value={QuizInfo?.SecretKey} onChangeEvt={(e: any) => GettingInputValues(e)} Name="SecretKey" disabled={FormConfig.FromLock} Error={FormConfig.SecretKeyEr} label="Secret Key" Required={true} Variant='filled' />
-      <CS_Select Selected={QuizInfo?.QuizOpen} onChangeEvt={(e: any) => GettingInputValues(e)} Name="QuizOpen" disabled={FormConfig.FromLock} Size='medium' variant='filled' label="Quiz Open" Options={[{ text: "Open", value: true}, { text: "Close", value: false }]} />
+      <CS_Select Selected={QuizInfo?.QuizOpen} onChangeEvt={(e: any) => GettingInputValues(e)} Name="QuizOpen" disabled={FormConfig.FromLock} Size='medium' variant='filled' label="Quiz Open" Options={[{ text: "Open", value: true }, { text: "Close", value: false }]} />
       <CS_Input Value={QuizInfo?.QuizDescription} onChangeEvt={(e: any) => GettingInputValues(e)} Name="QuizDescription" disabled={FormConfig.FromLock} Error={FormConfig.QuizDescriptionEr} ClassName="col-span-2" label="Description" Required={true} Multiline={true} Variant='filled' />
       <Button variant="contained" startIcon={FormConfig.FromLock ? <LockIcon /> : <LockOpenIcon />} onClick={() => setFormConfig({
         ...FormConfig, FromLock: !FormConfig.FromLock,

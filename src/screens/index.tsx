@@ -1,24 +1,22 @@
 import Home from "./home";
 import Login from "./login";
 import NotFound from "./notFound";
-import SignUp from "./signup";
+import SignUp from "./Form/signup";
 import ProtectedRoute from "./protectedRoute";
 import Admin from "./Admin";
-import Main from "./Main";
 import UserQuiz from "./UserQuiz";
 import Institute from "./Institute";
 import Student from "./Student";
-import Temps from "./temps";
+import Form from "./Form";
 
 
 
 
 export {
+    Form,
     Home,
-    Main,
     Login,
     Admin,
-    Temps,
     SignUp,
     Student,
     NotFound,

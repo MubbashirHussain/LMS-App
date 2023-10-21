@@ -7,6 +7,8 @@ import CS_Modal from "./Modal"
 import CS_ProgressBar from "./Progressbar"
 import CS_DataTable from "./Table"
 import CS_UploadFile from "./UploadfileBtn"
+import CS_SwitchBtn from "./SwitchBtn"
+import CS_DatePicker from "./DatePicker"
 
 
 export {
@@ -16,7 +18,9 @@ export {
     CS_Select,
     CS_Drawer,
     CS_Loader,
+    CS_SwitchBtn,
     CS_DataTable,
+    CS_DatePicker,
     CS_UploadFile,
     CS_PageLoader,
     CS_ProgressBar,

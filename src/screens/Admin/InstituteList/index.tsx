@@ -1,9 +1,9 @@
-import { CS_DataTable ,CS_PageLoader } from '../../../Components'
-// import { GridRowsProp } from '@mui/x-data-grid';
+import { CS_DataTable, CS_PageLoader } from '../../../Components'
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { FetchInstitute } from '../../../config/Redex/reducers/instituteList';
 import React from 'react';
+import { FetchInstituteFromAdmin } from '../../../config/Redex/reducers/AdminSlice';
+import { Typography } from '@mui/material';
 
 
 
@@ -66,26 +66,35 @@ const TableStyleObj = {
 }
 type AppDispatch = ThunkDispatch<{ a: string }, any, AnyAction>
 const InstituteList = () => {
-  let INdata = useSelector((state: any) => state.institute.Institutes)
-  let instituteData = Object.values(INdata)
+  let INdata = useSelector((state: any) => state.Admin.AdminData.Data)
+  let instituteData: any[] | null = INdata ? Object.values(INdata) : null
   let dispatch: AppDispatch = useDispatch()
-  let data: any[] = instituteData.map((x: any, i: number) => ({
+  let data: any[] | null | undefined = instituteData?.map((x: any, i: number) => ({
     id: i,
     name: x.InstituteName,
     Logo: x.instituteLogo,
     NoOfCampus: x.NoOfCampus,
     status: x.IsinstituteActive
   }))
+  // console.log(INdata, "main ")
+  // console.log(data, " data")
+  // console.log(instituteData, " Insdata")
   React.useEffect(() => {
-    dispatch(FetchInstitute("institute"))
+    dispatch(FetchInstituteFromAdmin("institute"))
   }, [])
 
   return (
 
     <div>
       <h1 className="text-3xl my-5 font-semibold ">Institute list</h1>
-      {!data ? <CS_PageLoader /> :
-        <CS_DataTable StyleObj={TableStyleObj} TableRowsData={data} ColHeadings={TableHeadingData} />
+      {instituteData ? !data ? <CS_PageLoader /> :
+        <CS_DataTable StyleObj={TableStyleObj} TableRowsData={data} ColHeadings={TableHeadingData} /> :
+        <>
+          <div className='flex text-center  flex-col gap-5 mt-[30%] justify-center items-center'>
+            <h1 className='font-semibold md:text-3xl'>😕 No Institute Registered😕 </h1>
+            <Typography fontFamily="monospace" variant="caption" className="my-2 text-center">Please Register Any Institute Then Institute List will Shown Here</Typography>
+          </div>
+        </>
       }    </div>
   )
 }

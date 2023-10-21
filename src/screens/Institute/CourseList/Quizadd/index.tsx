@@ -5,20 +5,26 @@ import LockIcon from '@mui/icons-material/LockOpen';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CS_Input, CS_Select } from '../../../Components';
+import { CS_Input, CS_Select } from '../../../../Components';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { AddQuizlist } from '../../../config/Redex/reducers/instituteList';
+import { AddQuizlist } from '../../../../config/Redex/reducers/instituteList';
+import { useParams } from 'react-router-dom';
 
 type state = { a: string }
 type AppDispatch = ThunkDispatch<state, any, AnyAction>
 
 const QuizAppAdmin = () => {
 
-  let dispatch:AppDispatch = useDispatch()
-  let UserLogined = useSelector((state: any) => state.User.UserLogin)
+  let Params = useParams()
+  let dispatch: AppDispatch = useDispatch()
+  let InstitutesData = useSelector((state: any) => state.institute.Institutes)
+  let Courses: any = InstitutesData.Course ? Object.values(InstitutesData.Course) : null
+  let SelectedCourse: any = Courses?.findIndex((x: any) => Params.Course?.split(" ").join("") === x.CourseName.split(" ").join(""))
 
-  const [FormData, setFormData] = React.useState<{
+  // console.log(Courses[SelectedCourse].id)
+
+  let [FormData, setFormData] = React.useState<{
     QuizInfo?: {
       QuizName?: string,
       QuizDuration?: number,
@@ -32,18 +38,18 @@ const QuizAppAdmin = () => {
       CorrectAns: string,
     }[]
   }>({})
-  const [Todo, setTodo] = React.useState<any[]>([])
-  const [Todoinput, setTodoinput] = React.useState("")
-  const [Question, setQuestion] = React.useState("")
-  const [Correct, setCorrect] = React.useState("")
-  const [QuizInfo, setQuizInfo] = React.useState<{
+  let [Todo, setTodo] = React.useState<any[]>([])
+  let [Todoinput, setTodoinput] = React.useState("")
+  let [Question, setQuestion] = React.useState("")
+  let [Correct, setCorrect] = React.useState("")
+  let [QuizInfo, setQuizInfo] = React.useState<{
     QuizName?: string,
     QuizDuration?: number,
     SecretKey?: string,
     QuizOpen?: boolean | string,
     QuizDescription?: string,
   }>()
-  const [QuestionList, setQuestionList] = React.useState<{
+  let [QuestionList, setQuestionList] = React.useState<{
     Question: string,
     Options: any[],
     CorrectAns: string,
@@ -71,10 +77,30 @@ const QuizAppAdmin = () => {
 
   }
 
+
+  let ResetAllinputs = () => {
+    FormData  = {}
+    Todo  = []
+    Todoinput  = ''
+    Question  = ''
+    Correct  = ''
+    QuizInfo  = {}
+    QuestionList  = []
+    setFormData(FormData)
+    setTodo(Todo)
+    setTodoinput(Todoinput)
+    setQuestion(Question)
+    setCorrect(Correct)
+    setQuizInfo(QuizInfo)
+    setQuestionList(QuestionList)
+  }
+
+
   let AddQuiz = () => {
+    ResetAllinputs()
     if (true
       && QuestionList.length > 0
-      && QuizInfo?.QuizName 
+      && QuizInfo?.QuizName
       && QuizInfo?.QuizDuration
       && QuizInfo?.SecretKey
       && QuizInfo?.QuizOpen != null
@@ -84,8 +110,7 @@ const QuizAppAdmin = () => {
       FormData.QuizQuestion = [...QuestionList];
       FormData.QuizInfo = { ...QuizInfo };
       setFormData({ ...FormData })
-      console.log({ ...FormData })
-      dispatch(AddQuizlist({ id: UserLogined.id, Data: FormData }))
+      dispatch(AddQuizlist({ InstID: InstitutesData.id, CourseID: Courses[SelectedCourse].id, Data: FormData }))
     } else {
       alert("something is Missing")
     }
